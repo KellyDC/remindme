@@ -31,103 +31,21 @@ Sometime we have a personal task that we do not want to show in our calendar, as
 1. Download `RemindMe-Setup.msi` from the releases page
 2. Double-click the MSI file to start the installation
 3. Follow the installation wizard
-4. The application will automatically start after installation and add itself to startup
+4. The application will automatically add itself to startup
+5. Navigate the program files location `C:\Program Files\RemindMe` and update the security allow users to have Modify access, so you can add/update the settings. 
 
-### Option 2: Download Pre-built Executable
-
-1. Download the latest `RemindMe.exe` from the releases page
-2. Place it in your desired directory (e.g., `C:\Program Files\RemindMe\`)
-3. Create a `settings.json` file in the same directory
-4. Run `RemindMe.exe`
-
-### Option 3: Build from Source
-
-1. Clone or download this repository
-2. Open PowerShell in the project directory
-3. Install dependencies:
-   ```powershell
-   go mod download
-   ```
-4. Build the executable:
-
-   ```powershell
-
-   # Build with icon embedded
-   windres resource.rc -o resource.syso
-   go build -ldflags="-H windowsgui" -o RemindMe.exe
-   ```
-
-Cleaning up the build artifacts...
-
-```powershell
-# Clean up previous builds
- Remove-Item .\RemindMe.exe -ErrorAction SilentlyContinue; go clean -cache -modcache
-```
 
 ## System Tray Usage
 
 Once RemindMe is running, you'll see a notification icon in your system tray. Right-click the icon to access:
 
+- **About**: Display About dialog of the application
 - **Check Tasks Now**: Manually trigger a task check
 - **Edit Settings**: Opens `settings.json` in Notepad for editing
 - **Reload Settings**: Reloads the configuration after making changes
 - **Quit**: Closes the application
 
 After editing settings, use "Reload Settings" to apply changes without restarting the application.
-
-## Building the Windows Installer
-
-To create your own MSI installer package:
-
-### Prerequisites for Building Installer
-
-1. **WiX Toolset v3.11 or later**: Download from [https://wixtoolset.org/releases/](https://wixtoolset.org/releases/)
-2. **Go 1.21 or later**: For building the application
-3. **PowerShell or Command Prompt**: For running build scripts
-
-### Build Steps
-
-1. **Using PowerShell (Recommended)**:
-
-   ```powershell
-   .\build-installer.ps1
-   ```
-
-2. **Using Batch File**:
-
-   ```cmd
-   build-installer.bat
-   ```
-
-3. **Manual Build**:
-
-   ```powershell
-   # Build the Go application
-   go build -ldflags "-H windowsgui" -o RemindMe.exe .
-
-   # Compile WiX source (adjust path as needed)
-   & "${env:ProgramFiles(x86)}\WiX Toolset v3.11\bin\candle.exe" -out dist\RemindMe.wixobj installer\RemindMe.wxs
-
-   # Create MSI installer
-   & "${env:ProgramFiles(x86)}\WiX Toolset v3.11\bin\light.exe" -out dist\RemindMe-Setup.msi dist\RemindMe.wixobj -ext WixUIExtension
-   ```
-
-4. **Updating media**:
-
-   If you need to update the media files (icons, banners, etc.) used in the installer, make your changes in the `installer` directory and re-run the build process.
-
-5. **Output**:
-   After running the build script, the installer will be created in the `dist` directory.
-
-   The installer will be created as `dist\RemindMe-Setup.msi` and includes:
-
-- Main executable (`RemindMe.exe`)
-- Default settings file (`settings.json`)
-- Application icons (`icon.ico`, `icon.png`)
-- Documentation files (`README.md`, `LICENSE`)
-- Start Menu shortcuts
-- Automatic startup configuration
-- Uninstaller
 
 ## Task Types
 
@@ -217,80 +135,6 @@ Create a `settings.json` file with your task configuration:
 - **log_level**: Logging verbosity (`debug`, `info`, `warn`, `error`)
 - **sound_enabled**: Global sound toggle
 
-### Cron Expression Format
-
-The check_interval uses standard cron format:
-
-```
-* * * * *
-│ │ │ │ │
-│ │ │ │ └─── Day of week (0-7, Sunday = 0 or 7)
-│ │ │ └───── Month (1-12)
-│ │ └─────── Day of month (1-31)
-│ └───────── Hour (0-23)
-└─────────── Minute (0-59)
-```
-
-## Usage
-
-### Running the Application
-
-#### Background Mode (Recommended)
-
-```powershell
-# Run with default settings.json in current directory
-.\RemindMe.exe
-
-# Run with custom settings file
-.\RemindMe.exe "C:\path\to\custom-settings.json"
-```
-
-#### Manual Check Mode
-
-```powershell
-# Check tasks once and exit
-.\RemindMe.exe settings.json --check-now
-```
-
-### Running as a Windows Service
-
-To run RemindMe as a Windows service, you can use tools like NSSM (Non-Sucking Service Manager):
-
-1. Download NSSM from https://nssm.cc/
-2. Install the service:
-   ```powershell
-   nssm install RemindMe "C:\path\to\RemindMe.exe" "C:\path\to\settings.json"
-   ```
-3. Start the service:
-   ```powershell
-   nssm start RemindMe
-   ```
-
-### Task Scheduler Integration
-
-Alternatively, use Windows Task Scheduler:
-
-1. Open Task Scheduler
-2. Create Basic Task
-3. Set trigger (e.g., "At startup")
-4. Set action to start `RemindMe.exe` with your settings file path
-5. Configure to run whether user is logged on or not
-
-## Logging
-
-The application creates detailed logs with the following information:
-
-- Task check events
-- Notification sending status
-- Error messages and debugging information
-- Application lifecycle events
-
-Logs are output to stdout in JSON format. You can redirect to a file:
-
-```powershell
-.\RemindMe.exe settings.json > RemindMe.log 2>&1
-```
-
 ## Example Scenarios
 
 ### Daily Work Reminders
@@ -379,43 +223,6 @@ Logs are output to stdout in JSON format. You can redirect to a file:
    - Check that the current date matches the due_date
    - Verify the check_interval includes the task's due_time
    - Ensure the task is enabled
-
-### Enable Debug Logging
-
-Set `log_level` to `"debug"` in your settings.json for more detailed output.
-
-### Testing Notifications
-
-Use the `--check-now` flag to test notifications immediately:
-
-```powershell
-.\RemindMe.exe settings.json --check-now
-```
-
-## Building from Source
-
-### Dependencies
-
-- [go-toast](https://github.com/go-toast/toast) - Windows toast notifications
-- [cron](https://github.com/robfig/cron/v3) - Cron job scheduling
-- [logrus](https://github.com/sirupsen/logrus) - Structured logging
-
-### Build Commands
-
-```powershell
-# Download dependencies
-go mod download
-
-# Build executable
-go build -o RemindMe.exe .
-
-# Build with optimizations (smaller file size)
-go build -ldflags="-s -w" -o RemindMe.exe .
-
-# Cross-compile for different architectures
-$env:GOOS="windows"; $env:GOARCH="amd64"; go build -o RemindMe-amd64.exe .
-$env:GOOS="windows"; $env:GOARCH="386"; go build -o RemindMe-386.exe .
-```
 
 ## License
 
