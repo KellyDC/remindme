@@ -1,241 +1,386 @@
-# Remind Me - Never Miss a Work or Personal Reminder
+# Remind Me - User Guide
 
-Remind Me is a Golang application that reads scheduled notifications from a JSON configuration file and sends Windows toast notifications when tasks are due.
-It is designed to help you stay on top of your tasks, whether they are work-related deadlines or personal reminders, with minimal effort.
+**Version 1.1.0** | Windows Task Reminder Application
 
-Sometime we have a personal task that we do not want to show in our calendar, as it is really personal, but we still want to be reminded of it.
+## What is Remind Me?
 
-![Remind Me](/banner.jpg)
+Remind Me is a "Never Miss a Reminder" application that sends native Windows 10/11 toast notifications when your tasks are due. It supports flexible scheduling including specific dates, daily reminders, and weekday-based tasks. The application runs quietly in your system tray and can be configured with a simple JSON file.
 
-## Features
+![Remind Me](banner.jpg)
 
-- 📅 **Schedule-based Notifications**: Automatically checks for due tasks at configurable intervals
-- 🔔 **Windows Toast Notifications**: Native Windows 10/11 notifications with sound support
-- 🖱️ **System Tray Integration**: Right-click menu in system tray for easy access to settings and controls
-- ⚙️ **JSON Configuration**: Easy-to-edit settings file for tasks and application configuration
-- 📝 **Comprehensive Logging**: Detailed logging with configurable log levels
-- 🚀 **Background Operation**: Runs silently in the system tray
-- 🎯 **Manual Check**: Option to check tasks immediately via system tray or command line
-- � **Windows Installer**: Professional MSI installer for easy deployment
-- �🛡️ **Error Handling**: Graceful handling of file errors, JSON parsing errors, and other exceptions
+## Key Features
 
-## Installation
+✅ **Flexible Scheduling Options**
 
-### Prerequisites
+- Specific date reminders (e.g., project deadlines)
+- Daily recurring tasks (e.g., medication, breaks)
+- Weekday-based tasks (e.g., "Monday,Wednesday,Friday" meetings)
+- Time patterns (hourly, specific times, etc.)
 
-- Windows 10 or Windows 11
-- For building: Go 1.21 or later and WiX Toolset v3.11+
+✅ **Smart Categories**
 
-### Option 1: Windows MSI Installer (Recommended)
+- Work tasks automatically skip weekends
+- Personal tasks work on any day
+- Custom categories supported
 
-1. Download `RemindMe-Setup.msi` from the releases page
-2. Double-click the MSI file to start the installation
-3. Follow the installation wizard
-4. The application will automatically add itself to startup
-5. Navigate the program files location `C:\Program Files\RemindMe` and update the security allow users to have Modify access, so you can add/update the settings. 
+✅ **Sound & Notifications**
 
+- Native Windows 10/11 toast notifications
+- Custom sound files (WAV format) or system sounds
+- Individual sound settings per task
 
-## System Tray Usage
+✅ **Easy Management**
 
-Once RemindMe is running, you'll see a notification icon in your system tray. Right-click the icon to access:
+- System tray integration with right-click menu
+- Edit settings without restarting
+- Auto-start with Windows option
+- Manual task checking
 
-- **About**: Display About dialog of the application
-- **Check Tasks Now**: Manually trigger a task check
-- **Edit Settings**: Opens `settings.json` in Notepad for editing
-- **Reload Settings**: Reloads the configuration after making changes
-- **Quit**: Closes the application
+## Quick Setup (3 Steps)
 
-After editing settings, use "Reload Settings" to apply changes without restarting the application.
+### Step 1: Install the Application
 
-## Task Types
+Run the MSI installer:
 
-RemindMe supports two types of tasks:
+```
+RemindMe-Setup.msi
+```
 
-1. **Specific Date Tasks**: Tasks that trigger only on a specific date
+The installer will:
 
-   - Set both `due_date` (YYYY-MM-DD format) and `due_time` (HH:MM format)
-   - Example: A project deadline on July 15, 2025 at 2:00 PM
+- Install the application to `C:\Program Files\Remind Me\`
+- Create a default `settings.json` file
+- Set up system tray shortcuts
+- Optionally configure auto-start
 
-2. **Recurring Daily Tasks**: Tasks that trigger every day at the same time
-   - Set `due_date` to an empty string `""` and specify `due_time` (HH:MM format)
-   - Example: Daily medication reminders, lunch breaks, or standup meetings
+### Step 2: Configure Your Tasks
 
-### Example Configuration with Both Task Types
+1. **Start the application** by running `RemindMe.exe` or from the Start Menu
+2. **Right-click the system tray icon** (📅) and select "Edit Settings"
+3. **Modify the `settings.json` file** with your tasks
+
+### Step 3: Test and Use
+
+1. **Save your settings** and close the editor
+2. **Right-click the tray icon** and select "Reload Settings"
+3. **Test immediately** by selecting "Check Tasks Now"
+
+## Task Configuration Examples
+
+### Basic Daily Reminder
 
 ```json
 {
-  "tasks": [
-    {
-      "id": "project-deadline",
-      "name": "Project Submission Deadline",
-      "description": "Submit the final project deliverables",
-      "due_date": "2025-07-20",
-      "due_time": "17:00",
-      "sound": true,
-      "enabled": true
-    },
-    {
-      "id": "daily-water-reminder",
-      "name": "Drink Water",
-      "description": "Stay hydrated! Time for a glass of water",
-      "due_date": "",
-      "due_time": "10:00",
-      "sound": false,
-      "enabled": true
-    }
-  ]
+  "id": "water-reminder",
+  "category": "Personal",
+  "name": "Drink Water",
+  "description": "Stay hydrated - drink a glass of water",
+  "due_date": "",
+  "due_time": "*:00",
+  "sound": true,
+  "custom_sound": false,
+  "enabled": true
 }
 ```
 
-## Configuration
-
-Create a `settings.json` file with your task configuration:
+### Weekday Work Meeting
 
 ```json
 {
-  "tasks": [
-    {
-      "id": "unique-task-id",
-      "name": "Task Name",
-      "description": "Detailed task description",
-      "due_date": "2025-07-14",
-      "due_time": "15:30",
-      "sound": true,
-      "enabled": true
-    }
-  ],
-  "check_interval": "0 15,16,17,18 * * *",
-  "log_level": "info",
-  "sound_enabled": true
+  "id": "standup",
+  "category": "Work",
+  "name": "Daily Standup",
+  "description": "Join the team standup meeting",
+  "due_date": "Monday,Wednesday,Friday",
+  "due_time": "09:15",
+  "sound": true,
+  "custom_sound": false,
+  "enabled": true
 }
 ```
 
-### Configuration Options
-
-#### Tasks
-
-- **id**: Unique identifier for the task
-- **name**: Display name for the task (shown in notification title)
-- **description**: Detailed description (shown in notification body)
-- **due_date**: Date in YYYY-MM-DD format (leave empty `""` for recurring daily tasks)
-- **due_time**: Time in HH:MM format (24-hour)
-- **sound**: Enable/disable sound for this specific task
-- **enabled**: Enable/disable the task
-
-**Note**: Tasks with an empty `due_date` field are treated as recurring daily tasks that trigger every day at the specified `due_time`.
-
-#### Global Settings
-
-- **check_interval**: Cron expression for when to check tasks
-  - Default: `"0 15,16,17,18 * * *"` (3PM, 4PM, 5PM, 6PM daily)
-  - Examples:
-    - `"0 * * * *"` - Every hour
-    - `"*/5 * * * *"` - Every 5 minutes
-    - `"0 9,12,15,18 * * *"` - 9AM, 12PM, 3PM, 6PM daily
-- **log_level**: Logging verbosity (`debug`, `info`, `warn`, `error`)
-- **sound_enabled**: Global sound toggle
-
-## Example Scenarios
-
-### Daily Work Reminders
+### Exercise Routine
 
 ```json
 {
-  "tasks": [
-    {
-      "id": "standup",
-      "name": "Daily Standup",
-      "description": "Join the team standup meeting",
-      "due_date": "2025-07-14",
-      "due_time": "09:00",
-      "sound": true,
-      "enabled": true
-    },
-    {
-      "id": "lunch-break",
-      "name": "Lunch Break",
-      "description": "Time for a healthy lunch break!",
-      "due_date": "",
-      "due_time": "12:00",
-      "sound": false,
-      "enabled": true
-    }
-  ],
-  "check_interval": "0 * * * *",
-  "log_level": "info",
-  "sound_enabled": true
+  "id": "exercise",
+  "category": "Personal",
+  "name": "Workout Time",
+  "description": "Time for your exercise routine!",
+  "due_date": "Tuesday,Thursday,Saturday",
+  "due_time": "19:30",
+  "sound": true,
+  "custom_sound": true,
+  "enabled": true
 }
 ```
 
-### Medication Reminders (Recurring Daily Tasks)
+### Specific Date Deadline
+
+```json
+{
+  "id": "project-deadline",
+  "category": "Work",
+  "name": "Project Due",
+  "description": "Final project submission deadline",
+  "due_date": "2025-08-15",
+  "due_time": "17:00",
+  "sound": true,
+  "custom_sound": false,
+  "enabled": true
+}
+```
+
+## Complete Settings File Example
 
 ```json
 {
   "tasks": [
     {
       "id": "morning-meds",
+      "category": "Personal",
       "name": "Morning Medication",
-      "description": "Take your morning medications with breakfast",
+      "description": "Take your morning medication with breakfast",
       "due_date": "",
       "due_time": "08:00",
       "sound": true,
+      "custom_sound": true,
       "enabled": true
     },
     {
-      "id": "evening-meds",
-      "name": "Evening Medication",
-      "description": "Take your evening medications with dinner",
-      "due_date": "",
-      "due_time": "19:00",
+      "id": "team-meeting",
+      "category": "Work",
+      "name": "Team Meeting",
+      "description": "Weekly team planning meeting",
+      "due_date": "Monday,Wednesday",
+      "due_time": "14:00",
       "sound": true,
+      "custom_sound": false,
+      "enabled": true
+    },
+    {
+      "id": "weekend-chores",
+      "category": "Personal",
+      "name": "Weekend Chores",
+      "description": "Time to do household chores",
+      "due_date": "Saturday,Sunday",
+      "due_time": "10:00",
+      "sound": false,
       "enabled": true
     }
   ],
-  "check_interval": "*/15 * * * *",
-  "log_level": "info",
-  "sound_enabled": true
+  "sound_enabled": true,
+  "custom_sound_path": "sound.wav"
+}
+```
+
+## Task Configuration Reference
+
+### Required Fields
+
+- **id**: Unique name for the task
+- **name**: Title shown in notification
+- **description**: Message shown in notification
+- **due_time**: When to trigger (HH:MM format)
+- **enabled**: true/false to activate the task
+
+### Due Date Options
+
+- **Specific date**: `"2025-12-25"` (YYYY-MM-DD)
+- **Daily**: `""` (empty string)
+- **Weekdays**: `"Monday"`, `"Friday"`, `"Tuesday,Thursday"`, `"Monday,Wednesday,Friday"`
+
+### Time Patterns
+
+- **Exact time**: `"09:30"` (9:30 AM)
+- **Every hour**: `"*:00"` (top of every hour)
+- **Time range**: `"14:*"` (every minute from 2:00-2:59 PM)
+
+### Categories
+
+- **Work**: Automatically skips weekends
+- **Personal**: Works any day of the week
+- **Custom**: Any name you want
+
+## System Tray Menu
+
+Right-click the 📅 icon in your system tray to access:
+
+- **About**: Application version and information
+- **Start with Windows**: Toggle auto-start on login
+- **Check Tasks Now**: Test notifications immediately
+- **Edit Settings**: Open settings.json in Notepad
+- **Reload Settings**: Apply changes without restarting
+- **Quit**: Close the application
+
+## Common Use Cases
+
+### 💊 Daily Medication
+
+```json
+{
+  "due_date": "",
+  "due_time": "08:00",
+  "sound": true,
+  "custom_sound": true
+}
+```
+
+### 💼 Work Meetings
+
+```json
+{
+  "category": "Work",
+  "due_date": "Monday,Wednesday,Friday",
+  "due_time": "14:00"
+}
+```
+
+### 🏃‍♂️ Exercise Schedule
+
+```json
+{
+  "category": "Personal",
+  "due_date": "Tuesday,Thursday,Saturday",
+  "due_time": "18:00"
+}
+```
+
+### 💧 Hydration Reminders
+
+```json
+{
+  "due_date": "",
+  "due_time": "*:00",
+  "sound": false
+}
+```
+
+### 🗓️ Specific Deadlines
+
+```json
+{
+  "due_date": "2025-09-01",
+  "due_time": "09:00",
+  "sound": true
 }
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Notifications Not Showing
 
-1. **Notifications not appearing**
+1. **Check Windows Settings**
 
-   - Ensure Windows notifications are enabled for the application
-   - Check Windows Focus Assist settings
-   - Verify the application is running with proper permissions
+   - Go to Settings > System > Notifications
+   - Ensure notifications are enabled
+   - Check that "Focus Assist" is not blocking notifications
 
-2. **Settings file not found**
+2. **Verify Task Configuration**
 
-   - Verify the path to settings.json is correct
-   - Use absolute paths when in doubt
-   - Check file permissions
+   - Ensure the task is `"enabled": true`
+   - Check date format: `"2025-12-25"` or `"Monday,Friday"`
+   - Check time format: `"14:30"` (24-hour format)
+   - For weekday tasks, make sure today matches a specified day
 
-3. **JSON parsing errors**
+3. **Test Immediately**
+   - Right-click system tray icon
+   - Select "Check Tasks Now"
+   - Look for error messages in the notification
 
-   - Validate your JSON syntax using an online JSON validator
-   - Ensure date format is YYYY-MM-DD
-   - Ensure time format is HH:MM (24-hour)
+### Configuration Errors
 
-4. **Tasks not triggering**
-   - Check that the current date matches the due_date
-   - Verify the check_interval includes the task's due_time
-   - Ensure the task is enabled
+1. **JSON Syntax Issues**
 
-## License
+   - Use an online JSON validator
+   - Check for missing commas, quotes, or brackets
+   - Ensure proper nesting of objects
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+2. **Date/Time Format Issues**
 
-## Contributing
+   - Dates: `"2025-07-28"` (YYYY-MM-DD)
+   - Times: `"09:30"` (HH:MM, 24-hour)
+   - Weekdays: `"Monday"`, `"Tuesday,Thursday"`
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+3. **Sound Issues**
+   - For custom sounds, ensure WAV file exists
+   - Check `custom_sound_path` setting
+   - Verify Windows sound settings
 
-## Support
+### Testing Your Setup
 
-For issues, questions, or feature requests, please create an issue on the GitHub repository.
+1. **Create a test task** with current time + 2 minutes
+2. **Save settings** and reload via system tray
+3. **Use "Check Tasks Now"** to test immediately
+4. **Watch for notifications** and any error messages
+
+## Tips for Success
+
+### 🎯 Start Simple
+
+- Begin with 1-2 tasks
+- Test thoroughly before adding more
+- Use the "Check Tasks Now" feature often
+
+### ⚙️ Organize Your Tasks
+
+- Use clear, descriptive names
+- Group related tasks with similar IDs
+- Use categories to separate work/personal
+
+### 🔔 Sound Strategy
+
+- Use sounds for important tasks only
+- Consider custom sounds for critical reminders
+- Test sound levels during setup
+
+### 📅 Scheduling Best Practices
+
+- Work tasks: Use weekday scheduling to skip weekends
+- Personal tasks: Use daily or specific weekdays as needed
+- Medications: Use daily recurring with specific times
+- Meetings: Use weekday patterns like "Monday,Wednesday,Friday"
+
+## Advanced Features
+
+### Custom Sound Files
+
+1. Place WAV files in the application folder
+2. Set `"custom_sound_path": "your-sound.wav"`
+3. Enable with `"custom_sound": true` per task
+
+### Auto-Start Configuration
+
+- Right-click system tray icon
+- Toggle "Start with Windows"
+- Application will start automatically on login
+
+### Multiple Time Patterns
+
+- `"*:00"` = Every hour at the top of the hour
+- `"09:*"` = Every minute from 9:00-9:59 AM
+- `"15:30"` = Exactly 3:30 PM
+
+## Need Help?
+
+### Quick Diagnosis
+
+1. Check if application is running (look for tray icon)
+2. Try "Check Tasks Now" for immediate testing
+3. Verify JSON syntax with online validator
+4. Test with a simple daily reminder first
+
+### Common Solutions
+
+- **No notifications**: Check Windows notification settings
+- **Wrong timing**: Verify 24-hour time format
+- **Weekends not working**: Use "Personal" category instead of "Work"
+- **Sounds not playing**: Check file path and WAV format
+
+### Still Having Issues?
+
+- Review the main README.md for developer documentation
+- Check the application logs for error messages
+- Verify your settings against the examples provided
+
+Remember: The application checks for tasks every minute, so there might be up to a 60-second delay for notifications.
