@@ -6,7 +6,7 @@
 
 Remind Me is a "Never Miss a Reminder" application that sends native Windows 10/11 toast notifications when your tasks are due. It supports flexible scheduling including specific dates, daily reminders, and weekday-based tasks. The application runs quietly in your system tray and can be configured with a simple JSON file.
 
-![Remind Me](banner.jpg)
+![Remind Me](/banner.jpg)
 
 ## Key Features
 
