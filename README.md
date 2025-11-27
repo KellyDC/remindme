@@ -8,7 +8,7 @@ A lightweight Windows application that sends toast notifications for scheduled t
 
 ## Quick Start
 
-1. **Install**: Run `RemindMe-Setup.msi`
+1. **Install**: Run `RemindMe-Setup.msi` - the app launches automatically after installation
 2. **Configure**: Right-click tray icon → Edit Settings
 3. **Add Tasks**: Use GUI editor with calendar/time pickers
 4. **Done**: Tasks trigger automatically
@@ -22,127 +22,77 @@ A lightweight Windows application that sends toast notifications for scheduled t
 - 🖥️ **Visual Editor**: Calendar picker, time dropdown, auto-generated IDs
 - 🎵 **Smart Sounds**: Per-task control, automatic birthday.wav
 - 🖱️ **System Tray**: Easy access and control
+- 🚀 **Auto-Start**: Launches after installation and starts with Windows
+- 💾 **Auto-Save**: Changes apply immediately
 
-## Example Tasks
+## Task Examples
 
-### Daily Reminder
+**Daily Reminder**: "Drink Water" every hour at :00  
+**Weekday Meeting**: "Team Standup" on Monday, Wednesday, Friday at 9:15 AM  
+**Birthday**: "Mom's Birthday" on specific date with automatic birthday icon/sound
 
-```json
-{
-  "category": "Personal",
-  "name": "Drink Water",
-  "due_date": "",
-  "due_time": "*:00",
-  "sound": true
-}
-```
+_Tip: Tasks with "birthday" in the name automatically use birthday icon and sound_
 
-### Weekday Meeting
+## Task Features
 
-```json
-{
-  "category": "Work",
-  "name": "Team Standup",
-  "due_date": "Monday,Wednesday,Friday",
-  "due_time": "09:15",
-  "sound": true
-}
-```
+- **Auto-Generated IDs**: System creates unique identifiers automatically
+- **Smart Categories**: Work tasks skip weekends, birthday tasks get special icons
+- **Flexible Scheduling**: Specific dates, daily reminders, or weekday patterns
+- **Custom Sounds**: Enable/disable per task, automatic birthday sound detection
+- **Visual Editing**: No JSON editing needed - use the GUI editor
 
-### Birthday Reminder
+## System Tray Menu
 
-```json
-{
-  "category": "Personal",
-  "name": "Mom's Birthday",
-  "due_date": "2025-08-15",
-  "due_time": "08:00",
-  "sound": true
-}
-```
+Right-click the tray icon to access:
 
-_Note: "Birthday" in name triggers birthday.png icon and birthday.wav sound_
+- **Edit Settings**: Open visual task editor
+- **Check Tasks Now**: Manually trigger task check
+- **Start with Windows**: Toggle auto-start on login
+- **Reload Settings**: Apply any changes
+- **About**: View version and app info
+- **Quit**: Exit application
 
-## Configuration
+## Visual Task Editor
 
-Tasks stored in `settings.json`:
+The GUI editor makes task management simple:
 
-### Task Fields
+1. Right-click tray icon → **Edit Settings**
+2. Browse existing tasks or click **New Task**
+3. Fill in the form:
+   - **Name** and **Description**
+   - **Category** dropdown (General, Personal, Work, Special)
+   - **Date picker** with full calendar
+   - **Time picker** with hour/minute selection
+   - **Sound** toggle
+4. Click **Save** - changes apply immediately
 
-- **id**: Auto-generated (YYYYMMDD-HHMMSS-random)
-- **category**: General, Personal, Work, Special
-- **name**: Title (birthday detection)
-- **description**: Message
-- **due_date**: `"2025-12-25"`, `""` (daily), or `"Monday,Friday"`
-- **due_time**: `"HH:MM"`, `"*:00"` (hourly), or `"09:*"` (every minute)
-- **sound**: Enable/disable per task
-- **enabled**: Active/inactive
+_Tasks are automatically saved to your settings file_
 
-### Special Features
+## Installation Details
 
-- **Birthday**: Tasks with "birthday" use `birthday.png` and `birthday.wav`
-- **Work Category**: Skips weekends automatically
-- **Icons**: Place `remindme.png` and `birthday.png` in app folder
-
-## System Tray
-
-Right-click icon:
-
-- **Edit Settings**: Visual task editor
-- **Check Tasks Now**: Manual trigger
-- **Start with Windows**: Auto-start toggle
-- **Reload Settings**: Apply changes
-- **About**: Version info
-- **Quit**: Exit
-
-## GUI Editor
-
-### Features
-
-- Calendar picker for dates
-- Time dropdown (hour/minute)
-- Category dropdown
-- Auto-generated IDs (hidden)
-- Birthday icon/sound detection
-- Auto-save to settings.json
-
-### Usage
-
-1. Right-click tray → Edit Settings
-2. Select task or click New Task
-3. Use pickers/dropdowns
-4. Save - applies immediately
+- **Installer**: Professional MSI installer with auto-start configuration
+- **Launch Options**: Choose to launch immediately after installation
+- **Startup Integration**: Automatically adds to Windows startup folder
+- **System Requirements**: Windows 10 or Windows 11
+- **Icons & Sounds**: All assets included with installation
 
 ## Troubleshooting
 
 **Notifications not showing?**
 
-- Check Windows notification settings
+- Check Windows notification settings for "Remind Me"
 - Verify Focus Assist is off
-- Ensure task is enabled
-
-**Wrong time?**
-
-- Use 24-hour format: `"14:30"`
-- Check weekday spelling
+- Ensure task is enabled in the editor
 
 **Birthday icon/sound not working?**
 
 - Include "birthday" in task name (case-insensitive)
-- Place `birthday.png` and `birthday.wav` in app folder
+- Icons and sounds are included with installation
 
 **GUI editor not opening?**
 
-- Restart application
-- Check taskbar for window
-
-## Requirements
-
-- Windows 10 or 11
-- `remindme.png` (default icon)
-- `birthday.png` (birthday tasks)
-- `sound.wav` (default sound)
-- `birthday.wav` (birthday tasks)
+- Check taskbar for the editor window
+- Restart the application from system tray
 
 ## License
 
