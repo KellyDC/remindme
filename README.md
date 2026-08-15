@@ -1,103 +1,75 @@
-# Remind Me - Windows Task Reminder
+# Remind Me - Never Miss an Important Event
 
-**Version 1.2.0**
+Remind Me is a lightweight Windows application that sends toast notifications for your scheduled tasks. It uses individual cron jobs for reliable, event-driven scheduling with a simple JSON configuration and user-friendly GUI editor.
 
-## What is Remind Me?
+![Remind Me](about.jpg)
 
-A lightweight Windows application that sends toast notifications for scheduled tasks. Features include flexible scheduling (dates, daily, weekdays), smart categories, custom sounds, and a visual task editor.
+**Version 2.0.0** | A Go language application for Windows task reminders
 
-## Quick Start
+## Features
 
-1. **Install**: Run `RemindMe-Setup.msi` - the app launches automatically after installation
-2. **Configure**: Right-click tray icon → Edit Settings
-3. **Add Tasks**: Use GUI editor with calendar/time pickers
-4. **Done**: Tasks trigger automatically
+- **Flexible Scheduling**: Specific dates, daily tasks, weekday patterns (Monday,Wednesday,Friday), wildcards like \*:00 for hourly, and \*:15 for quarter-hourly
+- **Toast Notifications**: Native Windows 10/11 notifications with custom icons and sounds
+- **System Tray**: Right-click menu for easy access and control
+- **GUI Editor**: Visual task editor with calendar and time pickers
+- **Smart Sounds**: Automatic event detection on several occasions with per-task sound control
+- **Auto-Generated IDs**: System-generated task IDs with timestamp + random string
+- **Category Dropdown**: Predefined categories (General, Personal, Work, Special)
+- **Special/Work/Personal**: Categories skip weekends automatically
+- **Individual Cron Jobs**: Each task has dedicated scheduler for reliability
+- **MSI Installer**: Professional Windows installer with auto-start
 
-## Key Features
+## Tech Stack
 
-- 📅 **Flexible Scheduling**: Specific dates, daily, or weekday patterns
-- 🎨 **Category Dropdown**: General, Personal, Work, Special
-- 🎂 **Birthday Detection**: Auto birthday icon/sound for tasks with "birthday" in name
-- 🔔 **Toast Notifications**: Native Windows 10/11 notifications
-- 🖥️ **Visual Editor**: Calendar picker, time dropdown, auto-generated IDs
-- 🎵 **Smart Sounds**: Per-task control, automatic birthday.wav
-- 🖱️ **System Tray**: Easy access and control
-- 🚀 **Auto-Start**: Launches after installation and starts with Windows
-- 💾 **Auto-Save**: Changes apply immediately
+- Go 1.26
+- WiX Toolset for MSI packaging (7.0)
 
-## Task Examples
+## Installation
 
-**Daily Reminder**: "Drink Water" every hour at :00  
-**Weekday Meeting**: "Team Standup" on Monday, Wednesday, Friday at 9:15 AM  
-**Birthday**: "Mom's Birthday" on specific date with automatic birthday icon/sound
+### Windows MSI Installer
 
-_Tip: Tasks with "birthday" in the name automatically use birthday icon and sound_
+1. Download `RemindMe-Setup.msi` from releases
+2. Run the installer
+3. Application auto-starts and adds itself to startup
 
-## Task Features
+### System Tray
 
-- **Auto-Generated IDs**: System creates unique identifiers automatically
-- **Smart Categories**: Work tasks skip weekends, birthday tasks get special icons
-- **Flexible Scheduling**: Specific dates, daily reminders, or weekday patterns
-- **Custom Sounds**: Enable/disable per task, automatic birthday sound detection
-- **Visual Editing**: No JSON editing needed - use the GUI editor
+Right-click the tray icon:
 
-## System Tray Menu
-
-Right-click the tray icon to access:
-
-- **Edit Settings**: Open visual task editor
-- **Check Tasks Now**: Manually trigger task check
-- **Start with Windows**: Toggle auto-start on login
-- **Reload Settings**: Apply any changes
-- **About**: View version and app info
+- **About Remind Me**: Open about window
+- **Start with Windows**: Toggle auto-start
+- **Edit Settings**: Open GUI editor
 - **Quit**: Exit application
 
-## Visual Task Editor
+### GUI Settings Editor
 
-The GUI editor makes task management simple:
+### Features
 
-1. Right-click tray icon → **Edit Settings**
-2. Browse existing tasks or click **New Task**
-3. Fill in the form:
-   - **Name** and **Description**
-   - **Category** dropdown (General, Personal, Work, Special)
-   - **Date picker** with full calendar
-   - **Time picker** with hour/minute selection
-   - **Sound** toggle
-4. Click **Save** - changes apply immediately
+- **Visual Task List**: See all tasks with name, category, time, and status
+- **Easy Management**: Add, edit, delete tasks with intuitive forms
+- **Date Picker**: Full calendar dialog with month navigation
+- **Time Picker**: Dropdown time selector (hour and minute)
+- **Category Dropdown**: Choose from General, Personal, Work, Special
+- **Birthday Detection**: Tasks with "birthday" in name use birthday icon and birthday sound
+- **Auto-Save**: Changes save immediately to settings.json
 
-_Tasks are automatically saved to your settings file_
+### Usage
 
-## Installation Details
+1. Right-click system tray icon → **Edit Settings**
+2. Select task from list to edit, or click **New Task**
+3. Category dropdown: General, Personal, Work, or Special
+4. Use date/time pickers for easy scheduling
+5. Click **Save** - changes apply automatically
+6. Event icons: birthday tasks show birthday icon, others shows default icon
 
-- **Installer**: Professional MSI installer with auto-start configuration
-- **Launch Options**: Choose to launch immediately after installation
-- **Startup Integration**: Automatically adds to Windows startup folder
-- **System Requirements**: Windows 10 or Windows 11
-- **Icons & Sounds**: All assets included with installation
+### Task Form Fields
 
-## Troubleshooting
+- **Name**: Display name (if contains "birthday", uses birthday icon/sound)
+- **Category**: Dropdown selection (Work tasks skip weekends)
+- **Description**: Notification message
+- **Due Date**: Calendar picker (specific date, weekdays, or empty for daily)
+- **Due Time**: Time picker (HH:MM format)
+- **Sound**: Enable/disable sound per task
+- **Enabled**: Enable/disable task
 
-**Notifications not showing?**
-
-- Check Windows notification settings for "Remind Me"
-- Verify Focus Assist is off
-- Ensure task is enabled in the editor
-
-**Birthday icon/sound not working?**
-
-- Include "birthday" in task name (case-insensitive)
-- Icons and sounds are included with installation
-
-**GUI editor not opening?**
-
-- Check taskbar for the editor window
-- Restart the application from system tray
-
-## License
-
-MIT License
-
-## Support
-
-Create issue on GitHub for questions or feature requests.
+see [LICENSE](LICENSE) for details.
